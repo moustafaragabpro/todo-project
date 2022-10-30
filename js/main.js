@@ -208,7 +208,10 @@ async function home() {
 // * completedTasks Section
 // ****************************************
 async function completedTasks() {
-    // * get un completed tasks from backend
+    $('#createTaskSection').fadeOut(100);
+    $('#editTaskSection').fadeOut(100);
+
+    // * get completed tasks from backend
     let completedTasksArr = await getDataFromBackend(
         `/todos/completed/${userObject.id}`
     );
