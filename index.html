@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>TODO APP</title>
+
+        <!-- * FONT -->
+        <link
+            href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap"
+            rel="stylesheet"
+        />
+
+        <!-- * CSS -->
+        <link rel="stylesheet" href="css/bootstrap.min.css" />
+        <link rel="stylesheet" href="css/style.css" />
+    </head>
+    <body class="bg-dark">
+        <!-- * Navbar -->
+        <nav class="navbar navbar-expand-lg fixed-top bg-black navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">TODO APP</a>
+                <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav"
+                    aria-controls="navbarNav"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                >
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a
+                                class="nav-link active"
+                                aria-current="page"
+                                href="#"
+                                >Home</a
+                            >
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Completed Tasks</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container mt-4">
+            <!-- **************************************************** -->
+            <!-- ********************* USER ************************* -->
+            <!-- **************************************************** -->
+
+            <!-- * Login Section -->
+            <section
+                class="row pt-5 text-white w-75 m-auto"
+                id="login"
+                style="display: none"
+            >
+                <div class="bg-black bg-opacity-50 p-5">
+                    <h1 class="mb-4">Login</h1>
+                    <div class="mb-3">
+                        <label for="loginEmail" class="form-label mb-1"
+                            >Email</label
+                        >
+                        <input
+                            type="email"
+                            class="form-control bg-transparent text-white"
+                            placeholder="Enter your email"
+                            id="loginEmail"
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label for="loginPassword" class="form-label mb-1"
+                            >Password</label
+                        >
+                        <input
+                            type="text"
+                            class="form-control bg-transparent text-white"
+                            placeholder="Enter your password"
+                            id="loginPassword"
+                        />
+                    </div>
+                    <div class="">
+                        <button
+                            class="btn btn-outline-success d-block px-5 mt-2"
+                        >
+                            Login
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- * Register Section -->
+            <section
+                class="row pt-5 text-white w-75 m-auto"
+                id="register"
+                style="display: none"
+            >
+                <div class="bg-black bg-opacity-50 p-5">
+                    <h1 class="mb-4">Register</h1>
+                    <div class="mb-3">
+                        <label for="username" class="form-label mb-1"
+                            >Username</label
+                        >
+                        <input
+                            type="text"
+                            class="form-control bg-transparent text-white"
+                            placeholder="Enter your username"
+                            id="username"
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label mb-1">Email</label>
+                        <input
+                            type="email"
+                            class="form-control bg-transparent text-white"
+                            placeholder="Enter your email"
+                            id="email"
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label mb-1"
+                            >Password</label
+                        >
+                        <input
+                            type="password"
+                            class="form-control bg-transparent text-white"
+                            placeholder="Enter your password"
+                            id="password"
+                        />
+                    </div>
+                    <div>
+                        <button
+                            class="btn btn-outline-success d-block px-5 mt-2"
+                            id="submit"
+                        >
+                            Register
+                        </button>
+                    </div>
+                    <p
+                        class="alert alert-danger py-1 mt-2"
+                        id="invalid"
+                        style="display: none"
+                    ></p>
+                </div>
+            </section>
+
+            <!-- **************************************************** -->
+            <!-- ********************* Tasks ************************* -->
+            <!-- **************************************************** -->
+
+            <!-- * uncompleted Tasks Section -->
+            <section
+                class="row gy-4 mt-5 text-white"
+                id="home"
+                style="display: none"
+            >
+                <!-- <div class="col-md-6 col-lg-4">
+                    <div class="bg-black bg-opacity-25 p-4">
+                        <h3>hello</h3>
+                        <p class="text-white text-opacity-75">
+                            Lorem ipsum dolor sit amet consectetur adipisicing
+                            elit. Facilis consectetur necessitatibus veniam
+                            error et in dolore aperiam reiciendis minima quae,
+                            labore numquam laborum officia fugit ea excepturi,
+                            dolorem odio ullam.
+                        </p>
+                        <hr />
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <button class="btn btn-outline-warning">
+                                    Edit
+                                </button>
+                                <button class="btn btn-outline-danger">
+                                    Delete
+                                </button>
+                            </div>
+                            <button class="btn btn-outline-success">
+                                Done
+                            </button>
+                        </div>
+                    </div>
+                </div> -->
+            </section>
+
+            <!-- * completed Tasks Section -->
+            <section
+                class="row gy-4 mt-5 text-white"
+                id="completedTasks"
+                style="display: none"
+            ></section>
+
+            <!-- * Edit Task Section -->
+            <section
+                class="row pt-5 text-white w-75 m-auto"
+                id="createTaskSection"
+            >
+                <div class="bg-black bg-opacity-50 p-5">
+                    <h1 class="mb-4">New Task</h1>
+                    <div class="mb-3">
+                        <label for="title" class="form-label mb-1">Title</label>
+                        <input
+                            type="text"
+                            class="form-control bg-transparent text-white"
+                            placeholder="title"
+                            id="title"
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label mb-1"
+                            >Description</label
+                        >
+                        <textarea
+                            type="text"
+                            rows="4"
+                            class="form-control bg-transparent text-white"
+                            placeholder="description"
+                            id="description"
+                        ></textarea>
+                    </div>
+                    <div class="">
+                        <button
+                            class="btn btn-outline-success d-block px-5 mt-2"
+                        >
+                            Create Task
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- * Edit Task Section -->
+            <section
+                class="row pt-5 text-white w-75 m-auto"
+                id="editTaskSection"
+            >
+                <div class="bg-black bg-opacity-50 p-5">
+                    <h1 class="mb-4">Edit Task</h1>
+                    <div class="mb-3">
+                        <label for="taskTitle" class="form-label mb-1"
+                            >Title</label
+                        >
+                        <input
+                            type="text"
+                            class="form-control bg-transparent text-white"
+                            placeholder="title"
+                            id="taskTitle"
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label for="taskDescription" class="form-label mb-1"
+                            >Description</label
+                        >
+                        <textarea
+                            type="text"
+                            rows="4"
+                            class="form-control bg-transparent text-white"
+                            placeholder="description"
+                            id="taskDescription"
+                        ></textarea>
+                    </div>
+                    <div class="">
+                        <button
+                            class="btn btn-outline-warning d-block px-5 mt-2"
+                        >
+                            Update Task
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- * SCRIPTS -->
+        <script src="js/jquery-3.6.1.min.js"></script>
+        <script src="js/bootstrap.bundle.min.js"></script>
+        <script src="js/main.js"></script>
+    </body>
+</html>
