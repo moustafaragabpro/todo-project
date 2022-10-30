@@ -228,17 +228,12 @@ async function completedTasks() {
                     ${completedTasksArr[i].description}
                 </p>
                 <hr />
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <button class="btn btn-outline-warning me-1" onclick="editTask(${completedTasksArr[i].id} , '#home')">
-                            Edit
-                        </button>
-                        <button class="btn btn-outline-danger" onclick="deleteTask(${completedTasksArr[i].id})">
-                            Delete
-                        </button>
-                    </div>
-                    <button class="btn btn-outline-success" onclick="markTaskAsDone(${completedTasksArr[i].id})">
-                        Done
+                <div>
+                    <button class="btn btn-outline-warning me-1" onclick="editTask(${completedTasksArr[i].id} , '#home')">
+                        Edit
+                    </button>
+                    <button class="btn btn-outline-danger" onclick="deleteTask(${completedTasksArr[i].id})">
+                        Delete
                     </button>
                 </div>
             </div>
