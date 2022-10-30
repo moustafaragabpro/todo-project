@@ -21,6 +21,7 @@ npm start
 - open index.html in browser
 
 ## any time after this first one 
+- start Apache & start MYSQL from XAMPP
 ```
 cd backend
 ```
