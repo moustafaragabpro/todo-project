@@ -85,6 +85,18 @@ app.get('/todos/non-completed/:userId', async function (req, res) {
     return res.json({ tasks: tasks });
 });
 
+// * GET Todo By Id
+app.get('/todos/:userId/:taskId', async function (req, res) {
+    const taskId = req.params.taskId;
+    const userId = req.params.userId;
+
+    const tasks = await prisma.task.findFirst({
+        where: { id: +taskId, userId: +userId },
+    });
+
+    return res.json({ task: tasks });
+});
+
 // * Create New Todo
 app.post('/todos', async function (req, res) {
     const title = req.body.title;

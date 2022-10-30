@@ -27,7 +27,7 @@ function saveUserData(userData) {
 
 function getUserData() {
     const userData = localStorage.getItem('user');
-    if (!userData) return false;
+    if (userData == null) return false;
 
     return JSON.parse(userData);
 }
@@ -73,9 +73,47 @@ async function regiterUser() {
 
         const user = response.user;
         saveUserData(user);
+
+        changeSection('#login', '#home', home);
+        return;
     });
 }
-regiterUser();
+
+// ****************************************
+// * Login Section
+// ****************************************
+async function loginUser() {
+    userObject = getUserData();
+    if (userObject) {
+        console.log(userObject);
+        changeSection('#login', '#home', home);
+        return;
+    }
+
+    const email = $('#loginEmail');
+    const password = $('#loginPassword');
+
+    $('#submitLogin').click(async function () {
+        const data = {
+            email: email.val(),
+            password: password.val(),
+        };
+        const response = await sendDataToBackend('/users/login', 'POST', data);
+        if (response.error) {
+            $('#invalid').html(response.error);
+            $('#invalid').slideDown(500);
+            return;
+        }
+        $('#invalid').slideUp(500);
+
+        const user = response.user;
+        saveUserData(user);
+
+        changeSection('#login', '#home', home);
+        return;
+    });
+}
+loginUser();
 
 // ****************************************
 // * Home Section
@@ -87,11 +125,13 @@ async function home() {
     );
     tasksArr = tasksArr.tasks;
 
+    console.log(tasksArr);
+
     // * create tasks box
     for (let i = 0; i < tasksArr.length; i++) {
         box += `
         <div class="col-md-6 col-lg-4">
-            <div class="bg-black bg-opacity-25 p-4">
+            <div class="task bg-black bg-opacity-25 p-4" >
                 <h3>${tasksArr[i].title}</h3>
                 <p class="text-white text-opacity-75">
                     ${tasksArr[i].description}
@@ -99,7 +139,7 @@ async function home() {
                 <hr />
                 <div class="d-flex justify-content-between">
                     <div>
-                        <button class="btn btn-outline-warning me-1">
+                        <button class="btn btn-outline-warning me-1" onclick="editTask(${tasksArr[i].id})">
                             Edit
                         </button>
                         <button class="btn btn-outline-danger">
@@ -127,7 +167,9 @@ async function home() {
 // ****************************************
 async function completedTasks() {
     // * get un completed tasks from backend
-    let completedTasksArr = await getDataFromBackend('/todos/completed');
+    let completedTasksArr = await getDataFromBackend(
+        `/todos/completed/${userObject.id}`
+    );
     completedTasksArr = completedTasksArr.tasks;
 
     // * create tasks box
@@ -171,3 +213,46 @@ async function completedTasks() {
 // ****************************************
 // * Add New Task Section
 // ****************************************
+async function addNewTask() {
+    const title = $('#title');
+    const description = $('#description');
+
+    $('#addTask').click(async function () {
+        const data = {
+            title: title.val(),
+            description: description.val(),
+            userId: userObject.id,
+        };
+
+        const response = await sendDataToBackend('/todos', 'POST', data);
+        console.log(response);
+    });
+}
+
+addNewTask();
+
+// ****************************************
+// * Edit Task Section
+// ****************************************
+async function editTask(id) {
+    const taskTitle = $('#taskTitle');
+    const taskDescription = $('#taskDescription');
+
+    // * Get task id
+    const response = await getDataFromBackend(`/todos/${userObject.id}/${id}`);
+    const task = response.task;
+
+    taskTitle.val(task.title);
+    taskDescription.val(task.description);
+
+    $('#updateTaskBtn').click(async function () {
+        const data = {
+            title: taskTitle.val(),
+            description: taskDescription.val(),
+            userId: userObject.id,
+        };
+
+        const response = await sendDataToBackend(`/todos/${id}`, 'Put', data);
+        console.log(response);
+    });
+}
