@@ -29,11 +29,23 @@ function getUserData() {
     const userData = localStorage.getItem('user');
     if (userData == null) return false;
 
+    $('#navLinks').html(`
+        <li class="nav-item">
+            <a class="nav-link" onclick="window.location.reload()">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="completedTasksBtn">Completed Tasks</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="logout">Logout</a>
+        </li>
+    `);
+
     return JSON.parse(userData);
 }
 
 function changeSection(currentSection, goingTo, sectionFunction) {
-    $(currentSection).fadeOut(100, function () {
+    $(currentSection).hide(1, function () {
         sectionFunction();
         $(goingTo).fadeIn(1000);
     });
@@ -41,12 +53,19 @@ function changeSection(currentSection, goingTo, sectionFunction) {
 
 // * *************************************
 
-// regiterUser();
-
 // ****************************************
 // * Register Section
 // ****************************************
 async function regiterUser() {
+    $('#navLinks').html(`
+        <li class="nav-item">
+            <a class="nav-link active" id="loginBtn">Login</a>
+        </li>
+    `);
+    $('#loginBtn').click(function () {
+        changeSection('#register', '#login', loginUser);
+    });
+
     userObject = getUserData();
     if (userObject) {
         console.log(userObject);
@@ -73,8 +92,8 @@ async function regiterUser() {
 
         const user = response.user;
         saveUserData(user);
+        window.location.reload();
 
-        changeSection('#login', '#home', home);
         return;
     });
 }
@@ -89,6 +108,15 @@ async function loginUser() {
         changeSection('#login', '#home', home);
         return;
     }
+
+    $('#navLinks').html(`
+        <li class="nav-item">
+            <a class="nav-link active" id="registerBtn">Register</a>
+        </li>
+    `);
+    $('#registerBtn').click(function () {
+        changeSection('#login', '#register', regiterUser);
+    });
 
     const email = $('#loginEmail');
     const password = $('#loginPassword');
@@ -108,12 +136,19 @@ async function loginUser() {
 
         const user = response.user;
         saveUserData(user);
-
-        changeSection('#login', '#home', home);
+        window.location.reload();
         return;
     });
 }
 loginUser();
+
+// ****************************************
+// * Logout User
+// ****************************************
+$('#logout').click(function () {
+    localStorage.removeItem('user');
+    window.location.reload();
+});
 
 // ****************************************
 // * Home Section
@@ -124,9 +159,18 @@ async function home() {
         `/todos/non-completed/${userObject.id}`
     );
     tasksArr = tasksArr.tasks;
-
     console.log(tasksArr);
 
+    $('#completedTasksBtn').click(function () {
+        changeSection('#home', '#completedTasks', completedTasks);
+    });
+
+    box = `
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="mb-2 fw-bold">Tasks</h1> 
+            <button class="btn btn-outline-info px-4" onclick="addNewTask('#home')">Add Task</button>
+        </div>
+    `;
     // * create tasks box
     for (let i = 0; i < tasksArr.length; i++) {
         box += `
@@ -139,14 +183,14 @@ async function home() {
                 <hr />
                 <div class="d-flex justify-content-between">
                     <div>
-                        <button class="btn btn-outline-warning me-1" onclick="editTask(${tasksArr[i].id})">
+                        <button class="btn btn-outline-warning me-1" onclick="editTask(${tasksArr[i].id} , '#home')">
                             Edit
                         </button>
-                        <button class="btn btn-outline-danger">
+                        <button class="btn btn-outline-danger" onclick="deleteTask(${tasksArr[i].id})">
                             Delete
                         </button>
                     </div>
-                    <button class="btn btn-outline-success">
+                    <button class="btn btn-outline-success" onclick="markTaskAsDone(${tasksArr[i].id})">
                         Done
                     </button>
                 </div>
@@ -160,8 +204,6 @@ async function home() {
     $('#home').html(box);
 }
 
-// home();
-
 // ****************************************
 // * completedTasks Section
 // ****************************************
@@ -172,6 +214,7 @@ async function completedTasks() {
     );
     completedTasksArr = completedTasksArr.tasks;
 
+    box = `<h1 class="mb-2 fw-bold">Completed Tasks</h1>`;
     // * create tasks box
     for (let i = 0; i < completedTasksArr.length; i++) {
         box += `
@@ -184,14 +227,14 @@ async function completedTasks() {
                 <hr />
                 <div class="d-flex justify-content-between">
                     <div>
-                        <button class="btn btn-outline-warning me-1">
+                        <button class="btn btn-outline-warning me-1" onclick="editTask(${completedTasksArr[i].id} , '#home')">
                             Edit
                         </button>
-                        <button class="btn btn-outline-danger">
+                        <button class="btn btn-outline-danger" onclick="deleteTask(${completedTasksArr[i].id})">
                             Delete
                         </button>
                     </div>
-                    <button class="btn btn-outline-success">
+                    <button class="btn btn-outline-success" onclick="markTaskAsDone(${completedTasksArr[i].id})">
                         Done
                     </button>
                 </div>
@@ -213,7 +256,11 @@ async function completedTasks() {
 // ****************************************
 // * Add New Task Section
 // ****************************************
-async function addNewTask() {
+async function addNewTask(prevSection) {
+    $(prevSection).fadeOut(100, function () {
+        $('#createTaskSection').fadeIn(1000);
+    });
+
     const title = $('#title');
     const description = $('#description');
 
@@ -224,17 +271,19 @@ async function addNewTask() {
             userId: userObject.id,
         };
 
-        const response = await sendDataToBackend('/todos', 'POST', data);
-        console.log(response);
+        await sendDataToBackend('/todos', 'POST', data);
+        window.location.reload();
     });
 }
-
-addNewTask();
 
 // ****************************************
 // * Edit Task Section
 // ****************************************
-async function editTask(id) {
+async function editTask(id, prevSection) {
+    $(prevSection).fadeOut(100, function () {
+        $('#editTaskSection').fadeIn(1000);
+    });
+
     const taskTitle = $('#taskTitle');
     const taskDescription = $('#taskDescription');
 
@@ -252,7 +301,24 @@ async function editTask(id) {
             userId: userObject.id,
         };
 
-        const response = await sendDataToBackend(`/todos/${id}`, 'Put', data);
-        console.log(response);
+        await sendDataToBackend(`/todos/${id}`, 'Put', data);
+
+        window.location.reload();
     });
+}
+
+// ****************************************
+// * delete Task
+// ****************************************
+async function deleteTask(id) {
+    await sendDataToBackend(`/todos/${id}`, 'DELETE', data);
+    window.location.reload();
+}
+
+// ****************************************
+// * Mark Task As Done
+// ****************************************
+async function markTaskAsDone(id) {
+    await sendDataToBackend(`/todos/done/${id}`, 'PUT', data);
+    window.location.reload();
 }

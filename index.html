@@ -20,7 +20,7 @@
         <!-- * Navbar -->
         <nav class="navbar navbar-expand-lg fixed-top bg-black navbar-dark">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">TODO APP</a>
+                <a class="navbar-brand">TODO APP</a>
                 <button
                     class="navbar-toggler"
                     type="button"
@@ -33,19 +33,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a
-                                class="nav-link active"
-                                aria-current="page"
-                                href="#"
-                                >Home</a
-                            >
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Completed Tasks</a>
-                        </li>
-                    </ul>
+                    <ul class="navbar-nav ms-auto" id="navLinks"></ul>
                 </div>
             </div>
         </nav>
@@ -93,7 +81,11 @@
             </section>
 
             <!-- * Register Section -->
-            <section class="row pt-5 text-white w-75 m-auto" id="register">
+            <section
+                class="row pt-5 text-white w-75 m-auto"
+                id="register"
+                style="display: none"
+            >
                 <div class="bg-black bg-opacity-50 p-5">
                     <h1 class="mb-4">Register</h1>
                     <div class="mb-3">
@@ -192,6 +184,7 @@
             <section
                 class="row pt-5 text-white w-75 m-auto"
                 id="createTaskSection"
+                style="display: none"
             >
                 <div class="bg-black bg-opacity-50 p-5">
                     <h1 class="mb-4">New Task</h1>
@@ -228,9 +221,11 @@
             </section>
 
             <!-- * Edit Task Section -->
+
             <section
                 class="row pt-5 text-white w-75 m-auto"
                 id="editTaskSection"
+                style="display: none"
             >
                 <div class="bg-black bg-opacity-50 p-5">
                     <h1 class="mb-4">Edit Task</h1>

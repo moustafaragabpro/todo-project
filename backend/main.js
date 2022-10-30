@@ -66,6 +66,7 @@ app.get('/todos', async function (req, res) {
 // * GET Completed Todos
 app.get('/todos/completed/:userId', async function (req, res) {
     const userId = req.params.userId;
+    if (!userId) return res.json({ error: 'Invalid request' });
 
     const tasks = await prisma.task.findMany({
         where: { isCompleted: true, userId: +userId },
@@ -75,14 +76,20 @@ app.get('/todos/completed/:userId', async function (req, res) {
 });
 
 // * GET non completed Todos
-app.get('/todos/non-completed/:userId', async function (req, res) {
-    const userId = req.params.userId;
+app.get('/todos/non-completed/:userId', async function (req, res, next) {
+    try {
+        const userId = req.params.userId;
+        if (!userId) return res.json({ error: 'Invalid request' });
 
-    const tasks = await prisma.task.findMany({
-        where: { isCompleted: false, userId: +userId },
-    });
+        const tasks = await prisma.task.findMany({
+            where: { isCompleted: false, userId: +userId },
+        });
 
-    return res.json({ tasks: tasks });
+        return res.json({ tasks: tasks });
+    } catch (error) {
+        // next();
+        return res.json({ error: 'Invalid request' });
+    }
 });
 
 // * GET Todo By Id
